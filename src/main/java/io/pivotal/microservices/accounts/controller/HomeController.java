@@ -13,6 +13,7 @@ public class HomeController {
 	
 	@RequestMapping("/")
 	public String home() {
+		System.out.println("go to index template file");
 		return "index";
 	}
 

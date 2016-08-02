@@ -19,30 +19,15 @@ public class AccountsController {
 	protected Logger logger = Logger.getLogger(AccountsController.class
 			.getName());
 
-	
-	//use mybatis
 	@Autowired
 	protected AccountService accountService;
 	
 	@Autowired
-	public AccountsController(AccountService accountService) {
-		
-		this.accountService = accountService;
-
+	public AccountsController() {
+		if(accountService!=null)
 		logger.info("AccountRepository says system has "
 				+ accountService.countAccounts() + " accounts");
 	}
-	/*
-	@Autowired
-	public AccountsController() {
-		if(accountRepository!=null){
-		logger.info("AccountRepository says system has "
-				+ accountRepository.countAccounts() + " accounts");
-		}else{
-			logger.info("accountRepository is null");
-		}
-	}
-	*/
 	
 	@RequestMapping("/accounts/{accountNumber}")
 	public AccountModel byNumber(@PathVariable("accountNumber") String accountNumber) {

@@ -12,7 +12,7 @@ import io.pivotal.microservices.accounts.db.model.AccountModel;
 
 @Repository
 public interface AccountDao {
-	@Select ("select * from T_ACCOUNT where NAME = #{name}")
+	@Select ("select * from T_ACCOUNT where ID = #{name}")
 	public AccountModel findByNumber(@Param("name")String name);
 	@Select("select * from T_ACCOUNT where NAME like #{names}")
 	public List<AccountModel> findByOwnerContainingIgnoreCase(@Param("names")String names);

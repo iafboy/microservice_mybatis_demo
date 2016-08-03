@@ -14,7 +14,7 @@ import io.pivotal.microservices.accounts.db.dao.AccountDao;
 
 @EnableAutoConfiguration
 @EnableDiscoveryClient
-//@Import(AccountsMyBatisConfiguration.class)
+@Import(AccountsMyBatisConfiguration.class)
 public class AccountsServer {
 	protected Logger logger = Logger.getLogger(AccountsServer.class.getName());
 	

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import io.pivotal.microservices.accounts.db.dao.AccountDao;
 import io.pivotal.microservices.accounts.db.model.AccountModel;
 @Service
-public class AccountService {
+public class AccountRepoService {
 	@Autowired
 	protected AccountDao accountRepository;
 

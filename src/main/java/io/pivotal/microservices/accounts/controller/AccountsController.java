@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.pivotal.microservices.accounts.db.model.AccountModel;
-import io.pivotal.microservices.accounts.service.AccountService;
+import io.pivotal.microservices.accounts.service.AccountRepoService;
 import io.pivotal.microservices.exceptions.AccountNotFoundException;
 
 
@@ -20,7 +20,7 @@ public class AccountsController {
 			.getName());
 
 	@Autowired
-	protected AccountService accountService;
+	protected AccountRepoService accountService;
 	
 	@Autowired
 	public AccountsController() {

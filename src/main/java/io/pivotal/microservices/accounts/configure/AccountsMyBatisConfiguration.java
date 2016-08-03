@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -102,7 +103,6 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 	}
 
 	@Bean(name = "sqlSessionFactory")
-	@ConditionalOnMissingBean
 	public SqlSessionFactory sqlSessionFactoryBean() {
 		logger.info("inital SqlSessionFactory");
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
@@ -111,8 +111,7 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 
 		ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		try {
-			bean.setMapperLocations(
-					resolver.getResources("classpath:" + CommonParams.BASEPACKAGEPATH + File.separator + "*.xml"));
+			bean.setMapperLocations(resolver.getResources("classpath:" + CommonParams.BASEPACKAGEPATH + File.separator + "*.xml"));
 			logger.info("SqlSessionFactory Created");
 			return bean.getObject();
 		} catch (Exception e) {
@@ -132,4 +131,8 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 	public PlatformTransactionManager annotationDrivenTransactionManager() {
 		return new DataSourceTransactionManager(dataSource);
 	}
+	@Bean
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource);
+	}	
 }

@@ -19,18 +19,10 @@ import io.pivotal.microservices.accounts.service.AccountRepoService;
 @Import(AccountsMyBatisConfiguration.class)
 public class AccountsServer {
 	protected static Logger logger = Logger.getLogger(AccountsServer.class.getName());
-	@Autowired(required=true)
-	protected static AccountRepoService accountService;
 	
 	public static void main(String[] args) {
 		System.setProperty("spring.config.name", "accounts-server");
 		SpringApplication.run(AccountsServer.class, args);
-		logger.info("app start got the account total number "+accountService.countAccounts());
 	
-	}
-	@RequestMapping("/")
-	public String home() {
-		logger.info("go to index template file and got the account total number "+accountService.countAccounts());
-		return "index";
 	}
 }

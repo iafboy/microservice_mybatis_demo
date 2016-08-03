@@ -24,8 +24,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
-import org.springframework.util.Assert;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 import io.pivotal.microservices.common.CommonParams;
@@ -37,20 +37,43 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 
 	private Properties duridSettings;
 
-	@Autowired
-	DataSource dataSource;
+	@Autowired(required = true)
+	DruidDataSource dataSource;
 
-	@Bean(name = "dataSource")
-	public DataSource dataSource() {
-		logger.info("dataSource() invoked");
-		try {
-			dataSource = DruidDataSourceFactory.createDataSource(duridSettings);
-		} catch (Exception e) {
-			logger.log(Level.WARNING, e.getMessage(), e);
-			e.printStackTrace();
-			throw new RuntimeException(e);
+	@Bean(name = "dataSource",initMethod = "init", destroyMethod = "close")
+	public DruidDataSource dataSource() {
+		if (dataSource == null) {
+			logger.info("dataSource() invoked");
+			try {
+				dataSource = new DruidDataSource();
+				dataSource.setFilters((String)duridSettings.get("filters"));
+				dataSource.setInitialSize(Integer.parseInt((String)duridSettings.get("initialSize")));
+				dataSource.setMaxActive(Integer.parseInt((String)duridSettings.get("maxActive")));
+				dataSource.setMinIdle(Integer.parseInt((String)duridSettings.get("minIdle")));
+				dataSource.setMaxWait(Long.parseLong((String)duridSettings.get("maxWait")));
+				dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong((String)duridSettings.get("timeBetweenEvictionRunsMillis")));
+				dataSource.setMinEvictableIdleTimeMillis(Long.parseLong((String)duridSettings.get("minEvictableIdleTimeMillis")));
+				dataSource.setValidationQuery((String)duridSettings.get("validationQuery"));
+				dataSource.setTestWhileIdle(Boolean.parseBoolean((String)duridSettings.get("testWhileIdle")));
+				dataSource.setTestOnBorrow(Boolean.parseBoolean((String)duridSettings.get("testOnBorrow")));
+				dataSource.setTestOnReturn(Boolean.parseBoolean((String)duridSettings.get("testOnReturn")));
+				dataSource.setPoolPreparedStatements(Boolean.parseBoolean((String)duridSettings.get("poolPreparedStatements")));
+				dataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt((String)duridSettings.get("maxPoolPreparedStatementPerConnectionSize")));
+				dataSource.setRemoveAbandoned(Boolean.parseBoolean((String)duridSettings.get("removeAbandoned")));
+				dataSource.setRemoveAbandonedTimeout(Integer.parseInt((String)duridSettings.get("removeAbandonedTimeout")));
+				dataSource.setLogAbandoned(Boolean.parseBoolean((String)duridSettings.get("logAbandoned")));
+				dataSource.setUrl((String)duridSettings.get("url"));
+				dataSource.setUsername((String)duridSettings.get("username"));
+				dataSource.setPassword((String)duridSettings.get("password"));
+				dataSource.setDriverClassName((String)duridSettings.get("driverClassName"));
+				dataSource.init();
+			} catch (Exception e) {
+				logger.log(Level.WARNING, e.getMessage(), e);
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			logger.info("dataSource() initaled");
 		}
-		logger.info("dataSource() initaled");
 		return dataSource;
 	}
 
@@ -67,12 +90,14 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 			throw new RuntimeException(e);
 		}
 		logger.info("dataSource configuration initaled");
+		logger.info(duridSettings.toString());
 	}
 
 	@PostConstruct
 	public void checkConfigFileExists() {
 		if (duridSettings == null) {
-			throw new RuntimeException("Cannot find config (please add config file or check your Mybatis configuration)");
+			throw new RuntimeException(
+					"Cannot find config (please add config file or check your Mybatis configuration)");
 		}
 	}
 
@@ -83,16 +108,11 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
 		bean.setTypeAliasesPackage("io.pivotal.microservices.accounts.db.mybatis.model");
-//		Properties properties = new Properties();
-//		properties.setProperty("reasonable", "true");
-//		properties.setProperty("supportMethodsArguments", "true");
-//		properties.setProperty("returnPageInfo", "check");
-//		properties.setProperty("params", "count=countSql");
 
 		ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		try {
 			bean.setMapperLocations(
-					resolver.getResources("classpath" + CommonParams.BASEPACKAGEPATH + File.separator + "*.xml"));
+					resolver.getResources("classpath:" + CommonParams.BASEPACKAGEPATH + File.separator + "*.xml"));
 			logger.info("SqlSessionFactory Created");
 			return bean.getObject();
 		} catch (Exception e) {

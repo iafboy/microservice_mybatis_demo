@@ -1,19 +1,23 @@
 package io.pivotal.microservices.accounts.controller;
 
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * Home page controller.
- * 
- * @author Paul Chapman
- */
+import io.pivotal.microservices.accounts.service.AccountRepoService;
+
 @Controller
 public class HomeController {
+	protected Logger logger = Logger.getLogger(HomeController.class
+			.getName());
+	@Autowired
+	protected AccountRepoService accountService;
 	
-	@RequestMapping("/")
+	@RequestMapping("/index")
 	public String home() {
-		System.out.println("go to index template file");
+		logger.info("go to index and got the account total number "+accountService.countAccounts());
 		return "index";
 	}
 

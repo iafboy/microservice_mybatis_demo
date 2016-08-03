@@ -36,27 +36,4 @@ eureka:
 #   metadataMap:
 #     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
 
-#database configure
-
-#datasource:
-#  name: taccount
-#  url: jdbc:mysql://localhost:3306/taccount?autoReconnect=true&useUnicode=true&characterEncoding=utf8
-#  username: root
-#  password: Gemalto,123
-#  type: com.alibaba.druid.pool.DruidDataSource
-#  driver-class-name: com.mysql.jdbc.Driver
-#  filters: stat
-#  maxActive: 20
-#  initialSize: 1
-#  maxWait: 60000
-#  minIdle: 1
-#  timeBetweenEvictionRunsMillis: 60000
-#  minEvictableIdleTimeMillis: 300000
-#  validationQuery: select 'x'
-#  testWhileIdle: true
-#  testOnBorrow: false
-#  testOnReturn: false
-#  poolPreparedStatements: true
-#  maxOpenPreparedStatements: 20
-
 

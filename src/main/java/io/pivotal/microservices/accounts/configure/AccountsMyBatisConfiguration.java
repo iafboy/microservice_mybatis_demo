@@ -131,8 +131,8 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 	public PlatformTransactionManager annotationDrivenTransactionManager() {
 		return new DataSourceTransactionManager(dataSource);
 	}
-	@Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource);
-	}	
+//	@Bean
+//    public DataSourceTransactionManager transactionManager() {
+//        return new DataSourceTransactionManager(dataSource);
+//	}	
 }

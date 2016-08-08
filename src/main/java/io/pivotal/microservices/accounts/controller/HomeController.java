@@ -15,9 +15,9 @@ public class HomeController {
 	@Autowired
 	protected AccountRepoService accountService;
 	
-	@RequestMapping("/index")
+	@RequestMapping("/")
 	public String home() {
-		logger.info("go to index and got the account total number "+accountService.countAccounts());
+		logger.info("go to index");
 		return "index";
 	}
 

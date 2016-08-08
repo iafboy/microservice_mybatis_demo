@@ -9,9 +9,7 @@ import java.math.BigDecimal;
  * 
  * @author Paul Chapman
  */
-public class AccountModel implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class AccountModel{
 
 	public static Long nextId = 0L;
 

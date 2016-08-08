@@ -11,7 +11,8 @@ import io.pivotal.microservices.common.CommonParams;
 @EnableAutoConfiguration
 @EnableDiscoveryClient
 //@Import(AccountsMyBatisConfiguration.class)
-@ComponentScan(basePackages = CommonParams.BASEACCOUNTPATH)
+//@ComponentScan(basePackages = CommonParams.BASEACCOUNTPATH)
+@ComponentScan(basePackages = {"io.pivotal.microservices.accounts","io.pivotal.microservices.accounts.configure","io.pivotal.microservices.accounts.service","io.pivotal.microservices.accounts.controller","io.pivotal.microservices.accounts.db.dao"})
 public class AccountsServer {
 	protected static Logger logger = Logger.getLogger(AccountsServer.class.getName());
 	

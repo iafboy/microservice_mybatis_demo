@@ -3,8 +3,12 @@ package io.pivotal.microservices.accounts.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,23 +19,21 @@ import io.pivotal.microservices.exceptions.AccountNotFoundException;
 
 
 @RestController
+//@ComponentScan(basePackages ="io.pivotal.microservices.accounts.service")
+//@Import({AccountRepoService.class})
 public class AccountsController {
 
 	protected Logger logger = Logger.getLogger(AccountsController.class
 			.getName());
 
-	@Autowired
+	//@Autowired
+	//@Qualifier("AccountRepoService")
+	@Resource(name="AccountRepoService")
 	protected AccountRepoService accountService;
-
-	public AccountsController() {
-		if(accountService!=null)
-		logger.info("AccountRepository says system has "
-				+ accountService.countAccounts() + " accounts");
-	}
 	
 	@RequestMapping("/accounts/{accountNumber}")
 	public AccountModel byNumber(@PathVariable("accountNumber") String accountNumber) {
-
+		logger.info("accounts-service total: " + accountService.countAccounts());
 		logger.info("accounts-service byNumber() invoked: " + accountNumber);
 		AccountModel account = accountService.findByNumber(accountNumber);
 		logger.info("accounts-service byNumber() found: " + account);

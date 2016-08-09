@@ -6,20 +6,19 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Delete;
-import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Mapper;
 import io.pivotal.microservices.accounts.db.model.AccountModel;
 
-@Repository
+@Mapper
 public interface AccountDao {
-	@Select ("select * from T_ACCOUNT where NUMBER = #{number}")
-	public AccountModel findByNumber(@Param("number")String number);
-	@Select("select * from T_ACCOUNT where NAME like #{names}")
-	public List<AccountModel> findByOwnerContainingIgnoreCase(@Param("names")String names);
+	@Select ("select * from T_ACCOUNT where NUMBER = #{NUMBER}")
+	public AccountModel findByNumber(@Param("NUMBER")String number);
+	@Select("select * from T_ACCOUNT where NAME like #{NAME}")
+	public List<AccountModel> findByOwnerContainingIgnoreCase(@Param("NAME")String names);
 	@Select("SELECT count(*) from T_ACCOUNT")
 	public int countAccounts();
-	@Update("Update T_ACCOUNT set NAME=#{name} where NUMBER=#{no}")
-	public boolean updateName(@Param("no")String no,@Param("name")String name);
-	@Delete("delete from T_ACCOUNT where NUMBER=#{no}")
-	public boolean deleteAccount(@Param("no")String no);
+	@Update("Update T_ACCOUNT set NAME=#{NAME} where NUMBER=#{NUMBER}")
+	public boolean updateName(@Param("NUMBER")String no,@Param("NAME")String name);
+	@Delete("delete from T_ACCOUNT where NUMBER=#{NUMBER}")
+	public boolean deleteAccount(@Param("NUMBER")String no);
 }

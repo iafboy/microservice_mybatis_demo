@@ -9,14 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -26,8 +23,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 import io.pivotal.microservices.common.CommonParams;
 
@@ -40,6 +37,9 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 
 	@Autowired(required = true)
 	DruidDataSource dataSource;
+	
+	@Autowired
+	StatFilter sf;
 
 	@Bean(name = "dataSource",initMethod = "init", destroyMethod = "close")
 	public DruidDataSource dataSource() {
@@ -67,6 +67,7 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 				dataSource.setUsername((String)duridSettings.get("username"));
 				dataSource.setPassword((String)duridSettings.get("password"));
 				dataSource.setDriverClassName((String)duridSettings.get("driverClassName"));
+						
 				dataSource.init();
 			} catch (Exception e) {
 				logger.log(Level.WARNING, e.getMessage(), e);
@@ -76,6 +77,16 @@ public class AccountsMyBatisConfiguration implements TransactionManagementConfig
 			logger.info("dataSource() initaled");
 		}
 		return dataSource;
+	}
+	
+	@Bean(name="statfilter")
+	public StatFilter statFilter(){
+		sf=new StatFilter();
+		sf.setLogSlowSql(Boolean.parseBoolean((String)duridSettings.get("logSlowSql")));
+		sf.setMergeSql(Boolean.parseBoolean((String)duridSettings.get("mergeSql")));
+		sf.setSlowSqlMillis(Long.parseLong((String)duridSettings.get("slowSqlMillis")));
+		logger.info("StatFilter() initaled");
+		return sf;
 	}
 
 	public AccountsMyBatisConfiguration() {

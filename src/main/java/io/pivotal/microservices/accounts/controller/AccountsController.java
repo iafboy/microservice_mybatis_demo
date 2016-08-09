@@ -5,10 +5,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,15 +15,11 @@ import io.pivotal.microservices.exceptions.AccountNotFoundException;
 
 
 @RestController
-//@ComponentScan(basePackages ="io.pivotal.microservices.accounts.service")
-//@Import({AccountRepoService.class})
 public class AccountsController {
 
 	protected Logger logger = Logger.getLogger(AccountsController.class
 			.getName());
 
-	//@Autowired
-	//@Qualifier("AccountRepoService")
 	@Resource(name="AccountRepoService")
 	protected AccountRepoService accountService;
 	

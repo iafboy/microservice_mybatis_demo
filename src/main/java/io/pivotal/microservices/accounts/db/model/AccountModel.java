@@ -3,49 +3,24 @@ package io.pivotal.microservices.accounts.db.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Persistent account entity with JPA markup. Accounts are stored in an H2
- * relational database.
- * 
- * @author Paul Chapman
- */
-public class AccountModel{
 
-	public static Long nextId = 0L;
+public class AccountModel implements Serializable{
 
+	private static final long serialVersionUID = -3649188071950755323L;
 	protected Long id;
-
 	protected String number;
-
-
-	protected String owner;
-
+	protected String name;
 	protected BigDecimal balance;
 
-	/**
-	 * This is a very simple, and non-scalable solution to generating unique
-	 * ids. Not recommended for a real application. Consider using the
-	 * <tt>@GeneratedValue</tt> annotation and a sequence to generate ids.
-	 * 
-	 * @return The next available id.
-	 */
-	protected static Long getNextId() {
-		synchronized (nextId) {
-			return nextId++;
-		}
-	}
-
-	/**
-	 * Default constructor for JPA only.
-	 */
+	
 	protected AccountModel() {
 		balance = BigDecimal.ZERO;
 	}
 
-	public AccountModel(String number, String owner) {
-		id = getNextId();
+	public AccountModel(Long id,String number, String owner) {
+		this.id = id;
 		this.number = number;
-		this.owner = owner;
+		this.name = owner;
 		balance = BigDecimal.ZERO;
 	}
 
@@ -53,12 +28,6 @@ public class AccountModel{
 		return id;
 	}
 
-	/**
-	 * Set JPA id - for testing and JPA only. Not intended for normal use.
-	 * 
-	 * @param id
-	 *            The new id.
-	 */
 	protected void setId(long id) {
 		this.id = id;
 	}
@@ -71,12 +40,14 @@ public class AccountModel{
 		this.number = accountNumber;
 	}
 
-	public String getOwner() {
-		return owner;
+
+
+	public String getName() {
+		return name;
 	}
 
-	protected void setOwner(String owner) {
-		this.owner = owner;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public BigDecimal getBalance() {
@@ -93,7 +64,7 @@ public class AccountModel{
 
 	@Override
 	public String toString() {
-		return number + " [" + owner + "]: $" + balance;
+		return number + " [" + name + "]: $" + balance;
 	}
 
 }

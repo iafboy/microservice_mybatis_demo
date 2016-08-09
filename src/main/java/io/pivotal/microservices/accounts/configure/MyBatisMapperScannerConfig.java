@@ -3,7 +3,6 @@ package io.pivotal.microservices.accounts.configure;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import io.pivotal.microservices.common.CommonParams;
 
 import java.util.logging.Logger;
 
